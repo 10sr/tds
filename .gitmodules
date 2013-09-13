@@ -1,3 +1,6 @@
 [submodule "python-oauth2"]
 	path = python-oauth2
 	url = git@github.com:simplegeo/python-oauth2.git
+[submodule "python-oauth"]
+	path = python-oauth
+	url = git@github.com:leah/python-oauth.git
