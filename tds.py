@@ -55,9 +55,16 @@ class AuthPage(webapp2.RequestHandler):
                                     users.create_login_url(self.request.uri)
                                 ))
         return
-        
+
+class ReqToken(webapp2.RequestHandler):
+    def get(self):
+        user = user.get_current_user()
+        if user:
+            return True
+        else:
+            return False
 
 app = webapp2.WSGIApplication([
     ('/auth', AuthPage),
-    ('/token', AuthPage),
+    ('/token', ReqToken),
 ], debug=True)
