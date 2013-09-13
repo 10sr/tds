@@ -14,6 +14,12 @@ handlers:
 - url: /token
   script: tds.app
 
+- url: /verify
+  script: tds.app
+
+- url: /setup
+  script: tds.app
+
 - url: /
   static_files: index.html
   upload: index.html
