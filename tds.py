@@ -65,8 +65,7 @@ class VerifyPage(webapp2.RequestHandler):
 
         etoken = getToken(user)
 
-        from urlparse import urlparse, parse_qs
-        # up = urlparse(self.request.uri)
+        from urlparse import parse_qs
         pq = parse_qs(self.request.query_string)
         vf = pq["oauth_verifier"][0].strip()
         reqtoken = pq["oauth_token"][0]
@@ -81,8 +80,6 @@ class VerifyPage(webapp2.RequestHandler):
             http_url=TUMBLR_ACCTOKEN,
             http_method="POST"
         )
-        # oreq.set_parameter("oauth_token_secret", token.secret)
-        # oreq.set_parameter("oauth_consumer_secret", consumer.secret)
         oreq.sign_request(sig, consumer, token)
         conn = httplib.HTTPConnection("localhost")
         conn.request("POST", TUMBLR_ACCTOKEN, headers=oreq.to_header())
@@ -155,8 +152,6 @@ class SetupPage(webapp2.RequestHandler):
                                 """<p><a href="{}">Logout</a></p>""".format(
                                     users.create_logout_url(self.request.uri)
                                 ))
-        # putToken(self.__user, reqtoken=self.__user.nickname(), self.__user.nickname())
-        # self.response.out.write(getToken(self.__user)[0])
         return
 
     def __ask_google_login(self):
