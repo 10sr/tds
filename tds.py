@@ -4,28 +4,30 @@ import urllib
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
+import oauth
+
 # import jinja2
 import webapp2
 
-class ConsumerKey(ndb.Model):
-    # userid = ndb.StringProperty(indexed=True)
-    key = ndb.StringProperty(indexed=False)
+class AccessToken(ndb.Model):
+    token = ndb.StringProperty(indexed=False)
+    token_secret = ndb.StringProperty(indexed=False)
 
-def getKey(user):
+def getToken(user):
     if not user:
         raise ValueError("user is None")
-    e = ConsumerKey.get_by_id(user.user_id())
+    e = AccessToken.get_by_id(user.user_id())
     if e:
-        return e.key
+        return (e.token, e.token_secret)
     else:
         return None
 
-def putKey(user, key):
+def putToken(user, token, token_secret):
     if not user:
         raise ValueError("user is None")
-    e = ConsumerKey(id=user.user_id(), key=key)
+    e = AccessToken(id=user.user_id(), token=token, token_secret=token_secret)
     e.put()
-    return key
+    return (token, token_secret)
 
 class AuthPage(webapp2.RequestHandler):
     __user = None
@@ -44,8 +46,8 @@ class AuthPage(webapp2.RequestHandler):
                                 """<p><a href="{}">Logout</a></p>""".format(
                                     users.create_logout_url(self.request.uri)
                                 ))
-        putKey(self.__user, self.__user.nickname())
-        self.response.out.write(getKey(self.__user))
+        putToken(self.__user, self.__user.nickname(), self.__user.nickname())
+        self.response.out.write(getToken(self.__user)[0])
         return
 
     def __ask_google_login(self):
