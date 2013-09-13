@@ -90,8 +90,9 @@ class VerifyPage(webapp2.RequestHandler):
 
         putToken(user, acc_secret=accsecret, acc_token=acctoken)
 
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write(str(getToken(user)))
+        # self.response.headers['Content-Type'] = 'text/plain'
+        # self.response.out.write(str(getToken(user)))
+        self.redirect(self.request.uri.rpartition("/")[0])
         return
 
 class AuthPage(webapp2.RequestHandler):
@@ -165,12 +166,19 @@ class SetupPage(webapp2.RequestHandler):
 class GetToken(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        if user:
-            self.response.headers['Content-Type'] = 'text/plain'
-            e = getToken(user)
-            self.response.out.write(str(e))
+        self.response.headers['Content-Type'] = 'application/json'
+        e = user and getToken(user)
+        if e:
+            import json
+            self.response.out.write(json.dumps({
+                "acc_token": e.acc_token,
+                "acc_secret": e.acc_secret,
+                "con_token": CONSUMER_KEY,
+                "con_secret": CONSUMER_SECRET
+            }))
             return
         else:
+            self.response.out.write("{}")
             return
 
 app = webapp2.WSGIApplication([

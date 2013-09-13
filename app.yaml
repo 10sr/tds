@@ -1,4 +1,4 @@
-application: your-app-id
+application: tumblrdbss
 version: 1
 runtime: python27
 api_version: 1
@@ -9,12 +9,16 @@ handlers:
   static_dir: static/
 
 - url: /auth
+  login: required
   script: tds.app
 
 - url: /token
+  secure: always
   script: tds.app
 
 - url: /verify
+  secure: always
+  login: required
   script: tds.app
 
 - url: /setup
@@ -23,6 +27,7 @@ handlers:
 - url: /
   static_files: index.html
   upload: index.html
+  secure: never
 
 libraries:
 - name: webapp2
