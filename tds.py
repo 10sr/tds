@@ -24,15 +24,18 @@ class TumblrToken(ndb.Model):
     req_token = ndb.StringProperty(indexed=False)
     req_secret = ndb.StringProperty(indexed=False)
 
-def getToken(user):
-    if not user:
-        raise ValueError("user is None")
-    e = TumblrToken.get_by_id(user.user_id())
-    return e
+def getToken():
+    user = users.get_current_user()
+    if user:
+        e = TumblrToken.get_by_id(user.user_id())
+        return e
+    return None
 
-def putToken(user, **kargs):
-    if not user:
-        raise ValueError("user is None")
+def putToken(**kargs):
+    user = users.get_current_user()
+    if user is None:
+        return None
+
     e = TumblrToken.get_by_id(user.user_id()) or TumblrToken(id=user.user_id())
     try:
         e.acc_token = kargs["acc_token"]
@@ -58,12 +61,10 @@ def putToken(user, **kargs):
 
 class VerifyPage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if not user:
+        etoken = getToken()
+        if etoken is None:
             self.redirect("setup")
             return
-
-        etoken = getToken(user)
 
         from urlparse import parse_qs
         pq = parse_qs(self.request.query_string)
@@ -88,7 +89,7 @@ class VerifyPage(webapp2.RequestHandler):
         acctoken = token.key
         accsecret = token.secret
 
-        putToken(user, acc_secret=accsecret, acc_token=acctoken)
+        putToken(acc_secret=accsecret, acc_token=acctoken)
 
         # self.response.headers['Content-Type'] = 'text/plain'
         # self.response.out.write(str(getToken(user)))
@@ -127,7 +128,7 @@ class AuthPage(webapp2.RequestHandler):
         reqtoken = token.key
         reqsecret = token.secret
 
-        putToken(user, req_secret=reqsecret, req_token=reqtoken)
+        putToken(req_secret=reqsecret, req_token=reqtoken)
 
         self.redirect(TUMBLR_AUTHORIZE + "?oauth_token=" + reqtoken)
 
@@ -165,9 +166,8 @@ class SetupPage(webapp2.RequestHandler):
 
 class GetToken(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
         self.response.headers['Content-Type'] = 'application/json'
-        e = user and getToken(user)
+        e = getToken()
         if e:
             import json
             self.response.out.write(json.dumps({

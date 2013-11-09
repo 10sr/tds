@@ -27,7 +27,7 @@ handlers:
 - url: /
   static_files: index.html
   upload: index.html
-  secure: never
+  secure: always
 
 libraries:
 - name: webapp2

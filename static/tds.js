@@ -28,6 +28,7 @@ var tds = (function (){
                 alert("Not authorized yet. Jump to setup page.");
                 window.content.location.href = "setup";
             } else {
+                alert("token got");
                 var c = window.document.getElementById("content");
                 c.innerHTML = [at, as, ct, cs].join("<br />\n");
                 var url = genTumblrReq("/user/dashboard",
@@ -56,7 +57,7 @@ var tds = (function (){
 
         var message = {
             method: "GET",
-            action: "http://api.tumblr.com/v2" + path,
+            action: "https://api.tumblr.com/v2" + path,
             parameters: {
                 oauth_signature_method: "HMAC-SHA1",
                 oauth_consumer_key: ct,
