@@ -6,9 +6,11 @@ threadsafe: true
 
 handlers:
 - url: /static/
+  secure: always
   static_dir: static/
 
 - url: /auth
+  secure: always
   login: required
   script: tds.app
 
@@ -22,12 +24,13 @@ handlers:
   script: tds.app
 
 - url: /setup
+  secure: always
   script: tds.app
 
 - url: /
+  secure: always
   static_files: index.html
   upload: index.html
-  secure: always
 
 libraries:
 - name: webapp2
