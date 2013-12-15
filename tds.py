@@ -18,13 +18,19 @@ TUMBLR_REQTOKEN = TUMBLR_OAUTH + "/request_token"
 TUMBLR_AUTHORIZE = TUMBLR_OAUTH + "/authorize"
 TUMBLR_ACCTOKEN = TUMBLR_OAUTH + "/access_token"
 
+
+
+###############################
+# Handle ndb database
 class TumblrToken(ndb.Model):
+    """Model for tubmlr access tokens."""
     acc_token = ndb.StringProperty(indexed=False)
     acc_secret = ndb.StringProperty(indexed=False)
     req_token = ndb.StringProperty(indexed=False)
     req_secret = ndb.StringProperty(indexed=False)
 
 def getToken():
+    """Return token for current user or None."""
     user = users.get_current_user()
     if user:
         e = TumblrToken.get_by_id(user.user_id())
@@ -32,6 +38,7 @@ def getToken():
     return None
 
 def putToken(**kargs):
+    """Save tokens for current user. Create new entry if not exists yet."""
     user = users.get_current_user()
     if user is None:
         return None
@@ -58,8 +65,12 @@ def putToken(**kargs):
 
 
 
+class __TDSReqHandler(webapp2.RequestHandler):
+    """Base class for TDS request handlers."""
+    pass
 
-class VerifyPage(webapp2.RequestHandler):
+
+class VerifyPage(__TDSReqHandler):
     def get(self):
         etoken = getToken()
         if etoken is None:
@@ -96,7 +107,8 @@ class VerifyPage(webapp2.RequestHandler):
         self.redirect(self.request.uri.rpartition("/")[0])
         return
 
-class AuthPage(webapp2.RequestHandler):
+class AuthPage(__TDSReqHandler):
+    """Authorize tumblr. Create url for auth and reditect to it."""
     def get(self):
         user = users.get_current_user()
         if not user:
@@ -106,7 +118,7 @@ class AuthPage(webapp2.RequestHandler):
         consumer = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
         sig = oauth.OAuthSignatureMethod_HMAC_SHA1()
 
-        if self.request.uri.startswith("http://localhost:8080/"):
+        if self.request.uri.startswith("http://localhost"):
             prt = "http://"
         else:
             prt = "https://"
@@ -137,7 +149,8 @@ class AuthPage(webapp2.RequestHandler):
         return
 
 
-class SetupPage(webapp2.RequestHandler):
+class SetupPage(__TDSReqHandler):
+    """Show urls for setup."""
     __user = None
     def get(self):
         self.__user = users.get_current_user()
@@ -164,7 +177,8 @@ class SetupPage(webapp2.RequestHandler):
                                 ))
         return
 
-class GetToken(webapp2.RequestHandler):
+class GetToken(__TDSReqHandler):
+    """Return current users tokens in JSON format."""
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
         e = getToken()
