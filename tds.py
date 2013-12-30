@@ -151,6 +151,7 @@ class AuthPage(__TDSReqHandler):
 
 class SetupPage(__TDSReqHandler):
     """Show urls for setup."""
+    # TODO: more user friendly setup page: users can freely logout, login
     __user = None
     def get(self):
         self.__user = users.get_current_user()
