@@ -11,6 +11,8 @@ var TDSSS = (function (){
     var __lastelem = null;
     var __lastcontent = null;
 
+    var __photowidth = 800;
+
     function init(){
         return;
     }
@@ -146,25 +148,33 @@ var TDSSS = (function (){
             // TODO: loading photos is very slow: prefetch them
             var ecaption = window.document.createElement("div");
             ecaption.innerHTML = content["caption"] || "";
+
             var ephotos = window.document.createElement("div");
+            // total number of photos
             var num = content["photos"].length || 0;
             for (var i = 0; i < num; i++) {
+                // current photo object
                 var po = content["photos"][i];
-                var ephoto = window.document.createElement("div");
-                var ephotocaption = window.document.createElement("div");
-                ephotocaption.innerHTML = po["caption"] || "";
+                var eimg = window.document.createElement("img");
+                eimg.setAttribute("alt", po["caption"]);
+                // number of alt photos to examine
                 var alt_num = po["alt_sizes"].length;
                 for (var ii = 0; ii < alt_num; ii++) {
-                    var eimg = window.document.createElement("img");
-                    eimg.setAttribute("src", po["alt_sizes"][ii]["url"]);
-                    eimg.setAttribute("width",
-                                      po["alt_sizes"][ii]["width"].toString());
-                    eimg.setAttribute("height",
-                                      po["alt_sizes"][ii]["height"].toString());
-                // how to do about sizes?
-                    ephoto.appendChild(eimg);
+                    // here i assume that the bigger comes earlier
+                    if (po["alt_sizes"][ii]["width"] <= __photowidth) {
+                        eimg.setAttribute("src", po["alt_sizes"][ii]["url"]);
+                        eimg.setAttribute(
+                            "width",
+                            po["alt_sizes"][ii]["width"].toString()
+                        );
+                        eimg.setAttribute(
+                            "height",
+                            po["alt_sizes"][ii]["height"].toString()
+                        );
+                        break;
+                    }
                 }
-                ephotos.appendChild(ephoto);
+                ephotos.appendChild(eimg);
             }
             ebody.appendChild(ephotos);
             ebody.appendChild(ecaption);
