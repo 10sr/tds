@@ -94,7 +94,7 @@ var TDSSS = (function (){
         var edate = window.document.createElement("p");
         edate.innerHTML = date;
 
-        // p elemetns cannot have block elements as their children
+        // p elemetns cannot have block elements (like p) as their children
         // https://twitter.com/10sr/status/316125985722478592
         var ebody = window.document.createElement("div");
         // set ebody by types
@@ -131,6 +131,7 @@ var TDSSS = (function (){
             ebody.appendchild(etitle);
             ebody.appendchild(edesc);
             break;
+
         case "answer":
             ebody.innerHTML = "answer";
             break;
@@ -140,15 +141,43 @@ var TDSSS = (function (){
         case "audio":
             ebody.innerHTML = "audio";
             break;
+
         case "photo":
-            ebody.innerHTML = "photo";
+            // TODO: loading photos is very slow: prefetch them
+            var ecaption = window.document.createElement("div");
+            ecaption.innerHTML = content["caption"] || "";
+            var ephotos = window.document.createElement("div");
+            var num = content["photos"].length || 0;
+            for (var i = 0; i < num; i++) {
+                var po = content["photos"][i];
+                var ephoto = window.document.createElement("div");
+                var ephotocaption = window.document.createElement("div");
+                ephotocaption.innerHTML = po["caption"] || "";
+                var alt_num = po["alt_sizes"].length;
+                for (var ii = 0; ii < alt_num; ii++) {
+                    var eimg = window.document.createElement("img");
+                    eimg.setAttribute("src", po["alt_sizes"][ii]["url"]);
+                    eimg.setAttribute("width",
+                                      po["alt_sizes"][ii]["width"].toString());
+                    eimg.setAttribute("height",
+                                      po["alt_sizes"][ii]["height"].toString());
+                // how to do about sizes?
+                    ephoto.appendChild(eimg);
+                }
+                ephotos.appendChild(ephoto);
+            }
+            ebody.appendChild(ephotos);
+            ebody.appendChild(ecaption);
             break;
+
         case "chat":
             ebody.innerHTML = "chat";
             break;
         }
 
+        eroot.appendChild(eblogname);
         eroot.appendChild(ebody);
+        eroot.appendChild(edate);
         return eroot
     }
 

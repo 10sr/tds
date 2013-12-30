@@ -7,6 +7,8 @@ TDSContent = (function (){
     // cbReqDashboard(): Callback function for requests. Used internally.
 
     var __queue = null;
+    // number of contents to fetch in one request
+    var __reqlimit = 20;
 
     function init(){
         __queue = [];
@@ -20,8 +22,13 @@ TDSContent = (function (){
     }
 
     function __reqDashboard(){
-        TDSReq.req("/user/dashboard",
-                   {limit: "20", callback: "TDSContent.cbReqDashboard"});
+        TDSReq.req(
+            "/user/dashboard",
+            {
+                limit: __reqlimit.toString(),
+                callback: "TDSContent.cbReqDashboard"
+            }
+        );
     }
 
     function cbReqDashboard(obj){
@@ -43,6 +50,7 @@ TDSContent = (function (){
     }
 
     function dequeue(){
+        // TODO: kick __reqDashboard when __queue get small
         // dequeue one content or null.
         if (__queue.length === 0) {
             return null;
