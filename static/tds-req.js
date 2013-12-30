@@ -22,7 +22,7 @@ var TDSReq = (function (){
         as = _as;
         ct = _ct;
         cs = _cs;
-        if (at && as) {
+        if (at && as && ct && cs) {
             __ready = true;
         }
         return;

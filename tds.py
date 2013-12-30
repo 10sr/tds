@@ -24,10 +24,10 @@ TUMBLR_ACCTOKEN = TUMBLR_OAUTH + "/access_token"
 # Handle ndb database
 class TumblrToken(ndb.Model):
     """Model for tubmlr access tokens."""
-    acc_token = ndb.StringProperty(indexed=False)
-    acc_secret = ndb.StringProperty(indexed=False)
-    req_token = ndb.StringProperty(indexed=False)
-    req_secret = ndb.StringProperty(indexed=False)
+    acc_token = ndb.StringProperty(indexed=False, default=None)
+    acc_secret = ndb.StringProperty(indexed=False, default=None)
+    req_token = ndb.StringProperty(indexed=False, default=None)
+    req_secret = ndb.StringProperty(indexed=False, default=None)
 
 def getToken():
     """Return token for current user or None."""
@@ -155,7 +155,11 @@ class SetupPage(__TDSReqHandler):
     def get(self):
         self.__user = users.get_current_user()
         if self.__user:
-            self.__ask_tumblr_login()
+            t = getToken()
+            if t and t.acc_token and t.acc_secret:
+                self.redirect("/")
+            else:
+                self.__ask_tumblr_login()
         else:
             self.__ask_google_login()
         return

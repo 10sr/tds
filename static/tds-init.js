@@ -32,6 +32,7 @@ var TDSInit = (function (){
 
     function cbGetToken(xhr){
         // callback function for getToken. Call TDSSS.start if TDSReq is ready.
+        // Otherwise move to /setup page.
         if (xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
             TDSReq.setTokens(json.acc_token,
