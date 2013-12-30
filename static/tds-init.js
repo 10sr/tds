@@ -1,5 +1,9 @@
 var TDSInit = (function (){
-    // initialize environments and start slideshow
+    // Initialize environments and start slideshow.
+
+    // Fetch tokens and pass them to TDSReq.
+    // After successfully setting tokens, kick TDSContent.start() and
+    // TDSSS.start() .
 
     // init and listeners
     function init(){
@@ -39,8 +43,12 @@ var TDSInit = (function (){
                 alert("Cannot get tokens for you. Jump to setup page.");
                 window.content.location.href = "setup";
             } else {
+                TDSContent.start();
                 TDSSS.start();
             }
+        } else {
+            // not sane status
+            return;
         }
     }
 

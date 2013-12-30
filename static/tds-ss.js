@@ -1,18 +1,38 @@
 var TDSSS = (function (){
-    // do slide show
+    // Do slide show.
 
     // members:
-    // start(): start slideshow
+    // start(): Start slideshow.
 
-    // init and listeners
+    var __frame = null;
+    var __timer = null;
+    var __interval = 3000;
+
     function init(){
         return;
     }
 
     function start(){
         // alert("token got");
-        TDSReq.req("/user/dashboard",
-                   {limit: "20", callback: "alertOBJ"});
+        __frame = window.document.getElementById("frame");
+        if (! __frame) {
+            // if #frame element not found abort
+            return;
+        }
+        showOne();
+        return;
+    }
+
+    function showOne(){
+        // show one content and set timer again
+        content = TDSContent.dequeue();
+        if (! content) {
+            __frame.innerHTML = "content not fetched yet";
+        } else {
+            __frame.innerHTML = "<pre>" + JSON.stringify(content) + "</pre>";
+        }
+        window.setTimeout(showOne, __interval);
+        return;
     }
 
     return {
@@ -20,13 +40,5 @@ var TDSSS = (function (){
         start: start
     };
 })();
-
-function alertOBJ(obj){
-    // show alert of JSON object.
-    // alert(JSON.stringify(obj));
-    var c = window.document.getElementById("content");
-    // c.innerHTML = [at, as, ct, cs].join("<br />\n");
-    c.innerHTML = JSON.stringify(obj);
-};
 
 TDSSS.init();
