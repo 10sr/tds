@@ -1,4 +1,7 @@
 var TDSNotify = (function (){
+    // time in milisec to hide message
+    var __msg_time = 2000;
+
     var __elem = null;
 
     function init(){
@@ -16,18 +19,30 @@ var TDSNotify = (function (){
     }
 
     function show(msg){
-        if (__elem) {
-            // TODO: accept multiple messages at once
-            __elem.innerHTML = __elem.innerHTML + msg;
-        } else {
+        if (! __elem) {
+            // if element for notify is not available just alert MSG
             alert(msg);
+            return;
         }
+
+        var e = window.document.createElement("div");
+        e.className = "notify-message";
+        e.innerHTML = msg;
+        __elem.appendChild(e);
+        window.setTimeout(function(){
+            __elem.removeChild(e);
+        }, __msg_time);
+        return;
+    }
+
+    function clear(){
         return;
     }
 
     return {
         init: init,
-        show: show
+        show: show,
+        clear: clear
     };
 })();
 

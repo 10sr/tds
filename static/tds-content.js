@@ -32,8 +32,8 @@ TDSContent = (function (){
     }
 
     function fetch(){
-        // TDSNotify.show("Start fetching...");
         if (! TDSReq.isreq()) {
+            TDSNotify.show("Fetching contents from Tumblr...");
             // avoid duplicating request
             __reqDashboard();
         }

@@ -128,7 +128,8 @@ var TDSSS = (function (){
             return null;
         }
         var elem = window.document.createElement(name);
-        // TODO: set id and classes
+        if (id) {elem.id = id;}
+        if (classes) {elem.className = classes;}
         return elem;
     }
 
