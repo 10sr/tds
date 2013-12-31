@@ -1,4 +1,9 @@
-#frame, #header, #notify{
-margin : 0 auto;
-width : 850px;
+#title, #frame, #header, #notify, #footer{
+    margin : 0 auto;
+    width : 850px;
+}
+
+#title {
+    text-align : right;
+    font-size : smaller;
 }
