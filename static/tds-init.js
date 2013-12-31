@@ -2,8 +2,7 @@ var TDSInit = (function (){
     // Initialize environments and start slideshow.
 
     // Fetch tokens and pass them to TDSReq.
-    // After successfully setting tokens, kick TDSContent.start() and
-    // TDSSS.start() .
+    // After successfully setting tokens, kick TDSSS.start() .
 
     // init and listeners
     function init(){

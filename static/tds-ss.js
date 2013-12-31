@@ -28,8 +28,8 @@ var TDSSS = (function (){
             // if #frame element not found abort
             return;
         }
-        var elem = __makeElementNoContent();
-        __frame.appendChild(elem);
+        // var elem = __makeElementNoContent();
+        // __frame.appendChild(elem);
         TDSContent.fetch();
         showOne();
         return;
