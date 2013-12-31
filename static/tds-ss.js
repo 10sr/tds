@@ -56,15 +56,15 @@ var TDSSS = (function (){
         if (__frame.hasChildNodes()) {
             var elems = __frame.childNodes;
 
-            if (elems.length == 0) {
+            if (elems.length === 0) {
                 // wont happen
                 TDSNotify.show("Something anusual happens!");
 
-            } else if (elems[0].style.display == "none") {
+            } else if (elems[0].style.display === "none") {
                 // first element is yet to be shown, show it as usual
                 elems[0].style.display = "block";
 
-            } else if (elems.length == 1) {
+            } else if (elems.length === 1) {
                 // only one can be shown, and it has already shown
                 TDSNotify.show("Nothing to show");
 
