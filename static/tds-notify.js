@@ -18,7 +18,7 @@ var TDSNotify = (function (){
     function show(msg){
         if (__elem) {
             // TODO: accept multiple messages at once
-            __elem.innerHTML = msg;
+            __elem.innerHTML = __elem.innerHTML + msg;
         } else {
             alert(msg);
         }

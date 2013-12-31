@@ -74,7 +74,7 @@ var TDSSS = (function (){
                 __frame.childNodes[0].style.display = "block";
             }
 
-            if (elems,length <= 5) {
+            if (elems.length <= 5) {
                 TDSContent.fetch();
             }
 

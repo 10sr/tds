@@ -14,7 +14,7 @@ TDSContent = (function (){
     // If "new", I try to get latest post, and the queue is oldest first.
     // If "old", I go deeply, get older posts forever and the queue is newest
     // first.
-    var __direction = "new";
+    var __direction = "old";
 
     // __latest is used when __direction is "new"
     var __latest = 0;
