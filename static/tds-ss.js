@@ -71,7 +71,7 @@ var TDSSS = (function (){
             } else {
                 // first one has already shown and second is available
                 __frame.removeChild(elems[0]);
-                elems[0].style.display = "block";
+                __frame.childNodes[0].style.display = "block";
             }
 
             if (elems,length <= 5) {
