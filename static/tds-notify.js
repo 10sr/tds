@@ -1,6 +1,6 @@
 var TDSNotify = (function (){
     // time in milisec to hide message
-    var __msg_time = 2000;
+    var __msg_time = 3000;
 
     var __elem = null;
 
@@ -18,7 +18,7 @@ var TDSNotify = (function (){
         return;
     }
 
-    function show(msg){
+    function show(msg, sticky){
         if (! __elem) {
             // if element for notify is not available just alert MSG
             alert(msg);
@@ -29,9 +29,11 @@ var TDSNotify = (function (){
         e.className = "notify-message";
         e.innerHTML = msg;
         __elem.appendChild(e);
-        window.setTimeout(function(){
-            __elem.removeChild(e);
-        }, __msg_time);
+        if (! sticky) {
+            window.setTimeout(function(){
+                __elem.removeChild(e);
+            }, __msg_time);
+        }
         return;
     }
 

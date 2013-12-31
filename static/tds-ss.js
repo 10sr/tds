@@ -175,7 +175,7 @@ var TDSSS = (function (){
         case "text":
             var etitle = __createElem("p");
             etitle.innerHTML = content["title"] || "";
-            var etextdoby = __createElem("div");
+            var etextbody = __createElem("div");
             etextbody.innerHTML = content["body"] || "";
             ebody.appendChild(etitle);
             ebody.appendChild(etextbody);

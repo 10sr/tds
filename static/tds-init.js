@@ -40,8 +40,11 @@ var TDSInit = (function (){
                              json.con_secret);
             // alert(TDSReq.isready())
             if (! TDSReq.isready()) {
-                alert("Cannot get tokens for you. Jump to setup page.");
-                window.content.location.href = "setup";
+                TDSNotify.show(
+                    "Cannot get tokens for you. First go setup page.",
+                    true
+                );
+                // window.content.location.href = "setup";
             } else {
                 TDSSS.start();
             }
