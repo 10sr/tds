@@ -2,9 +2,9 @@ TDSContent = (function (){
     // Fetch dashboard contents and enqueue them.
 
     // members:
-    // start(): Start fetching loop.
+    // fetch(): Fetch contents and enqueue them asyncly.
     // dequeue(): Dequeue one content from internal queue.
-    // cbReqDashboard(): Callback function for requests. Used internally.
+    // __cbReqDashboard(): Callback function for requests. Used internally.
 
     var __queue = null;
     // number of contents to fetch in one request
@@ -15,10 +15,12 @@ TDSContent = (function (){
         return;
     }
 
-    function start(){
-        // start fetching contents
-        __reqDashboard();
-        return;
+    function fetch(){
+        // TDSNotify.show("Start fetching...");
+        if (! TDSReq.isreq()) {
+            // avoid duplicating request
+            __reqDashboard();
+        }
     }
 
     function __reqDashboard(){
@@ -26,13 +28,14 @@ TDSContent = (function (){
             "/user/dashboard",
             {
                 limit: __reqlimit.toString(),
-                callback: "TDSContent.cbReqDashboard"
+                callback: "TDSContent.__cbReqDashboard"
             }
         );
     }
 
-    function cbReqDashboard(obj){
+    function __cbReqDashboard(obj){
         // callback for __reqDashboard
+        TDSReq.onFinish();
         if (obj.meta.status === 200) {
             for (var i = 0; i < obj.response.posts.length; i++) {
                 __enqueue(obj.response.posts[i]);
@@ -50,7 +53,6 @@ TDSContent = (function (){
     }
 
     function dequeue(){
-        // TODO: kick __reqDashboard when __queue get small
         // dequeue one content or null.
         if (__queue.length === 0) {
             return null;
@@ -60,9 +62,9 @@ TDSContent = (function (){
 
     return {
         init: init,
-        start: start,
+        fetch: fetch,
         dequeue: dequeue,
-        cbReqDashboard: cbReqDashboard
+        __cbReqDashboard: __cbReqDashboard
     };
 })();
 

@@ -2,9 +2,11 @@ var TDSReq = (function (){
     // Request to tumblr API using JSONP
 
     // members:
-    // setTokens(at, as, ct, cs)
     // req(path, params): Request tumblr PATH API with PARAMS.
+    // setTokens(at, as, ct, cs)
     // bool isready(): true if tokens are available and can request to tumblr.
+    // bool isreq(): true if currently requesting
+    // onFinish(): Finalize a request. Callback functions MUST call this.
 
     // at, as, ct, cs: {access,consumer}_{token,secret}
     var at;
@@ -12,6 +14,9 @@ var TDSReq = (function (){
     var ct;
     var cs;
     var __ready = false;
+
+    // id for script tag for JSONP
+    var __id = "tdsreq-json-script";
 
     function init(){
         return;
@@ -63,20 +68,39 @@ var TDSReq = (function (){
     }
 
     function __callJSONP(url) {
-        // FIXME: remove old script tags
         // start JSONP request
-        var target = document.createElement('script');
+        if (window.document.getElementById(__id)) {
+            // avoid duplicating request
+            return;
+        }
+        var target = window.document.createElement('script');
+        target.id = __id;
         target.charset = 'utf-8';
         target.src = url;
         // target.id = "TDS_JSONP";
-        document.body.appendChild(target);
+        window.document.body.appendChild(target);
+    }
+
+    function onFinish(){
+        // remove script tag
+        window.document.body.removeChild(
+            window.document.getElementById(__id)
+        );
+        return;
+    }
+
+    function isreq(){
+        // getElementById returns null if none found.
+        return window.document.getElementById(__id) ? true : false;
     }
 
     return {
         init: init,
         req: req,
         setTokens: setTokens,
-        isready: isready
+        isready: isready,
+        isreq: isreq,
+        onFinish: onFinish
     };
 })();
 

@@ -8,17 +8,17 @@ var TDSInit = (function (){
     // init and listeners
     function init(){
         if (window.addEventListener) {
-            window.addEventListener("load", onLoadListener, false);
+            window.addEventListener("load", __onLoadListener, false);
         } else if (window.attatchEvent) {
-            window.attatchEvent("onload", onLoadListener);
+            window.attatchEvent("onload", __onLoadListener);
         }
     }
 
-    function onLoadListener(){
-        getToken(cbGetToken);
+    function __onLoadListener(){
+        __getToken(cbGetToken);
     }
 
-    function getToken(callback){
+    function __getToken(callback){
         // Access to /token to get tokens from ndb and run callback function.
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "token", true);
@@ -44,7 +44,6 @@ var TDSInit = (function (){
                 alert("Cannot get tokens for you. Jump to setup page.");
                 window.content.location.href = "setup";
             } else {
-                TDSContent.start();
                 TDSSS.start();
             }
         } else {
