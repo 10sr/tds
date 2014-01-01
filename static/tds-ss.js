@@ -58,7 +58,7 @@ var TDSSS = (function (){
 
             if (elems.length === 0) {
                 // wont happen
-                TDSNotify.show("Something anusual happens!");
+                TDSNotify.show("Something unusual happens!");
 
             } else if (elems[0].style.display === "none") {
                 // first element is yet to be shown, show it as usual
@@ -80,7 +80,7 @@ var TDSSS = (function (){
 
         } else {
             // no element to show
-            TDSNotify.show("Nothing to show");
+            TDSNotify.show("Nothing next to show");
             TDSContent.fetch();
         }
 
