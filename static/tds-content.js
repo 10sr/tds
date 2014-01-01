@@ -70,23 +70,26 @@ TDSContent = (function (){
         TDSReq.onFinish();
 
         if (obj.meta.status === 200) {
-            var total = obj.response.posts.length;
+            var total_fetched = obj.response.posts.length;
+            var total_actual = 0;
             // var ids = [];
-            if (total === 0) {
+            if (total_fetched === 0) {
                 // if no posts available return immediately
                 return;
             }
 
             if (__direction === "new") {
-                for (var i = total - 1; i >= 0; i--) {
+                for (var i = total_fetched - 1; i >= 0; i--) {
                     // enqueue from older one
                     __enqueue(obj.response.posts[i]);
+                    total_actual += 1;
                 }
             } else if (__direction === "old") {
-                for (var i = 0; i < total; i++) {
+                for (var i = 0; i < total_fetched; i++) {
                     // enqueue from newer one
-                    if (obj.response.posts[i].id < __oldest) {
+                    if (obj.response.posts[i].id < __oldest || __oldest === 0) {
                         __enqueue(obj.response.posts[i]);
+                        total_actual += 1;
                     }
                 }
             }
@@ -97,14 +100,14 @@ TDSContent = (function (){
             // }
 
             var cur_latest = obj.response.posts[0].id;
-            var cur_oldest = obj.response.posts[0].id;
-            // var cur_oldest = obj.response.posts[total-1].id;
+            var cur_oldest = obj.response.posts[total_fetched - 1].id;
             if (cur_latest > __latest) { __latest = cur_latest; }
             if (__oldest === 0 || cur_oldest < __oldest) {
                 // 0 means not set yet
                 __oldest = cur_oldest;
             }
-            __total_posts += total;
+            __total_posts += total_actual;
+            TDSNotify.show("Fetched " + total_actual.toString() + " contents")
             // TDSNotify.show(ids.join("\n"), true);
             return;
 
