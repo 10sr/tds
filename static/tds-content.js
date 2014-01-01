@@ -8,13 +8,13 @@ TDSContent = (function (){
 
     var __queue = null;
     // number of contents to fetch in one request
-    var __reqlimit = 10;
+    var __reqlimit = 20;
 
     // __direction must be "new" or "old"
     // If "new", I try to get latest post, and the queue is oldest first.
     // If "old", I go deeply, get older posts forever and the queue is newest
     // first.
-    var __direction = "new";
+    var __direction = "old";
 
     // __latest is used when __direction is "new": since_id is set to this
     var __latest = 0;
