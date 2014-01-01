@@ -1,9 +1,38 @@
-#title, #frame, #header, #notify, #footer, #controller{
+/* #title, #frame, #header, #notify, #footer, #controller{ */
+/*     margin : 0 auto; */
+/*     width : 850px; */
+/* } */
+body {
     margin : 0 auto;
     width : 850px;
+    background-color : #eeeeee;
 }
 
 #title {
+    width : 830px;
     text-align : right;
-    font-size : smaller;
+    font-size : medium;
+    position : absolute;
+    top : 0;
+}
+
+#title, #header {
+    margin : 10px;
+}
+
+#controller {
+    position : absolute;
+    top : 3em;
+    width : 830px;
+    text-align : right;
+}
+
+#frame {
+    background-color : #ffffff;
+    padding : 10px;
+}
+
+#footer {
+    text-align : right;
+    font-size : small;
 }

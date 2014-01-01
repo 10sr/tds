@@ -173,14 +173,14 @@ var TDSSS = (function (){
             var etitle = __createElem("p");
             var elink = __createElem("a");
             elink.setAttribute("href", content["url"]);
-            elink.innerHTML = coutent["title"] || content["url"];
+            elink.innerHTML = content["title"] || content["url"];
             etitle.appendChild(elink);
 
             var edesc = __createElem("div");
             edesc.innerHTML = content["description"] || "";
 
-            ebody.appendchild(etitle);
-            ebody.appendchild(edesc);
+            ebody.appendChild(etitle);
+            ebody.appendChild(edesc);
             break;
 
         case "answer":

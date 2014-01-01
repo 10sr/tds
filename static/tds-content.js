@@ -18,9 +18,10 @@ TDSContent = (function (){
 
     // __latest is used when __direction is "new": since_id is set to this
     var __latest = 0;
-    // __oldest is used when __direction is "old"
-    // value 0 means a valid value is not set yet
+    // __oldest and __offset are used when __direction is "old"
+    // value 0 for __oldest means a valid value is not set yet
     var __oldest = 0;
+    var __offset = 0;
     // NOTE: newer posts will get older id
     // NOTE: Contents in posts are in newest (biggest) first order
     // NOTE: when since_id is set for request parameter, newer post than that id
@@ -36,6 +37,9 @@ TDSContent = (function (){
     // __direction === "new":
     // After fetching first set of posts, remember the latest (biggest) post id.
     // In following requests, set since_id to that id.
+
+    // NOTE: At some point users/dashboard always returns same posts regardless
+    // of offset. Why?
 
     function init(){
         __queue = [];
@@ -58,7 +62,7 @@ TDSContent = (function (){
         if (__direction === "new" && __latest !== 0) {
             params["since_id"] = __latest.toString();
         } else if (__direction === "old") {
-            params["offset"] = __total_posts.toString();
+            params["offset"] = __offset.toString();
         }
 
         // TDSNotify.show(JSON.stringify(params), true);
@@ -71,33 +75,37 @@ TDSContent = (function (){
 
         if (obj.meta.status === 200) {
             var total_fetched = obj.response.posts.length;
-            var total_actual = 0;
-            // var ids = [];
+            TDSNotify.show("Queued: " + total_fetched.toString());
+            TDSNotify.show("Oldest id: " + __oldest.toString());
+            var total_queued = 0;
+            var ids = [];
             if (total_fetched === 0) {
                 // if no posts available return immediately
                 return;
             }
 
+            // enqueue contents
             if (__direction === "new") {
                 for (var i = total_fetched - 1; i >= 0; i--) {
                     // enqueue from older one
                     __enqueue(obj.response.posts[i]);
-                    total_actual += 1;
+                    total_queued += 1;
                 }
             } else if (__direction === "old") {
                 for (var i = 0; i < total_fetched; i++) {
                     // enqueue from newer one
                     if (obj.response.posts[i].id < __oldest || __oldest === 0) {
                         __enqueue(obj.response.posts[i]);
-                        total_actual += 1;
+                        total_queued += 1;
                     }
                 }
             }
 
             // biggest comes first: newest comes first
-            // for (var i = 0; i < total; i++) {
-            //     ids.push(obj.response.posts[i].id.toString());
-            // }
+            for (var i = 0; i < total_fetched; i++) {
+                ids.push(obj.response.posts[i].id.toString());
+            }
+            TDSNotify.show("Fetched posts: " + ids.join("\n"));
 
             var cur_latest = obj.response.posts[0].id;
             var cur_oldest = obj.response.posts[total_fetched - 1].id;
@@ -106,9 +114,15 @@ TDSContent = (function (){
                 // 0 means not set yet
                 __oldest = cur_oldest;
             }
-            __total_posts += total_actual;
-            TDSNotify.show("Fetched " + total_actual.toString() + " contents")
-            // TDSNotify.show(ids.join("\n"), true);
+            __total_posts += total_queued;
+            __offset += total_fetched;
+            TDSNotify.show("Fetched " + total_queued.toString() + " contents")
+
+            if (total_queued === 0) {
+                // if some contents fetched but none queued retry
+                TDSNotify.show("None queued. Retry");
+                fetch();
+            }
             return;
 
         } else {
