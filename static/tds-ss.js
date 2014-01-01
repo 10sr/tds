@@ -17,6 +17,8 @@ var TDSSS = (function (){
     // max width in pixel for photo
     var __photowidth = 800;
 
+    var __pinned = false;
+
     function init(){
         return;
     }
@@ -35,7 +37,23 @@ var TDSSS = (function (){
         return;
     }
 
+    function pin(){
+        __pinned = true;
+        return __pinned;
+    }
+
+    function unpin(){
+        __pinned = false;
+        return __pinned;
+    }
+
     function showOne(){
+        if (__pinned) {
+            // if pinned do nothing
+            __timer = window.setTimeout(showOne, __interval);
+            return;
+        }
+
         var content;
         var elem;
         // first get all content
@@ -263,7 +281,9 @@ var TDSSS = (function (){
 
     return {
         init: init,
-        start: start
+        start: start,
+        pin: pin,
+        unpin: unpin
     };
 })();
 
