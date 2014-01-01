@@ -30,8 +30,6 @@ var TDSSS = (function (){
             // if #frame element not found abort
             return;
         }
-        // var elem = __makeElementNoContent();
-        // __frame.appendChild(elem);
         TDSContent.fetch();
         showOne();
         return;
@@ -107,39 +105,6 @@ var TDSSS = (function (){
         return;
     }
 
-    function _showOne(){
-        // show one content and set timer again
-        // set __lastcontent and __lastelement
-        var content = TDSContent.dequeue();
-        var elem;
-        if (content) {
-            elem = __makeElement(content);
-            // __frame.innerHTML = "<pre>" + JSON.stringify(content) + "</pre>";
-        } else {
-            if (! __lastcontent) {
-                // if no content previously do nothing
-                // set next timer
-                __timer = window.setTimeout(showOne, __interval);
-                return;
-            }
-            // if no content available yet previously something was shown
-            elem = __makeElementNoContent();
-        }
-        if (elem) {
-            __replaceElement(elem);
-            __lastcontent = content;
-            __lastelement = elem;
-
-            // set next timer
-            __timer = window.setTimeout(showOne, __interval);
-        } else {
-            // failed to create element
-            // show next one.
-            showOne();
-        }
-        return;
-    }
-
     function __createElem(name, id, classes){
         // Utility function to create new element.
         if (! name) {
@@ -148,20 +113,6 @@ var TDSSS = (function (){
         var elem = window.document.createElement(name);
         if (id) {elem.id = id;}
         if (classes) {elem.className = classes;}
-        return elem;
-    }
-
-    function __replaceElement(elem){
-        // Replace previously shown element with new one in __frame.
-
-        // This is very simple one: remove prevous one and add next.
-        __frame.innerHTML = "";
-        __frame.appendChild(elem);
-    }
-
-    function __makeElementNoContent(){
-        var elem = __createElem("div");
-        elem.innerHTML = "No content! Wait for a minute...";
         return elem;
     }
 
@@ -243,7 +194,6 @@ var TDSSS = (function (){
             break;
 
         case "photo":
-            // TODO: loading photos is very slow: prefetch them
             var ecaption = __createElem("div");
             ecaption.innerHTML = content["caption"] || "";
 
