@@ -169,6 +169,7 @@ var TDSSS = (function (){
         // make new element for CONTENT and return it
         var blogname = content["blog_name"];
         var url = content["post_url"];
+        var post_id = content["id"] || 0;
         var date = content["date"];
         // text, quote, link, answer, video, audio, photo, chat
         var type = content["type"];
@@ -176,12 +177,21 @@ var TDSSS = (function (){
         var tags = content["tags"] || [];
 
         // e- prefix means dom element
-        var eroot = __createElem("div");
 
-        var eblogname = __createElem("p");
-        eblogname.innerHTML = blogname + " " + url;
+        // root of elements: this function returns this
+        var eroot = __createElem("div", null, "content");
 
-        var edate = __createElem("p");
+        // postinfo like blogname, id and url
+        var epostinfo = __createElem("p", null, "content-postinfo");
+        var eblogname = window.document.createTextNode(blogname + " ");
+        var epostlink = __createElem("a");
+        epostlink.innerHTML = post_id.toString();
+        epostlink.setAttribute("href", url);
+        epostlink.setAttribute("target", "_blank");
+        epostinfo.appendChild(eblogname);
+        epostinfo.appendChild(epostlink);
+
+        var edate = __createElem("p", null, "content-date");
         edate.innerHTML = date;
 
         // p elemetns cannot have block elements (like p) as their children
@@ -273,7 +283,7 @@ var TDSSS = (function (){
             break;
         }
 
-        eroot.appendChild(eblogname);
+        eroot.appendChild(epostinfo);
         eroot.appendChild(ebody);
         eroot.appendChild(edate);
         return eroot
