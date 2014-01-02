@@ -5,24 +5,36 @@
 body {
     margin : 0 auto;
     width : 850px;
-    background-color : #eeeeee;
+    background-color : #007FB1;
+}
+
+#header {
+    margin-top : 0;
+    margin-bottom : 1em;
+    padding : 10px;
+    border-bottom-left-radius : 10px;
+    border-bottom-right-radius : 10px;
+    background-color : #E6855E;
+    font-family : "arial black", sans-serif;
+    /* color : lightcyan; */
 }
 
 #title {
-    width : 830px;
-    text-align : right;
     font-size : medium;
-    position : absolute;
+    float : right;
+    margin-top : 0;
+    /* width : 830px; */
+    /* text-align : right; */
+    /* position : absolute; */
     top : 0;
+    /* color : white; */
+    text-decoration : underline;
 }
 
-#title, #header {
-    margin : 10px;
-}
 
 #controller {
     position : absolute;
-    top : 3em;
+    top : 5em;
     width : 830px;
     text-align : right;
 }
@@ -30,9 +42,40 @@ body {
 #frame {
     background-color : #ffffff;
     padding : 10px;
+    margin : 0 auto;
+    border-radius : 10px;
 }
 
 #footer {
     text-align : right;
     font-size : small;
+}
+
+#notify {
+    position : fixed;
+    bottom : 1em;
+    width : 850px;
+}
+
+.notify-message {
+    border-radius : 10px;
+    background-color : black;
+    color : white;
+    padding : 0.5em;
+    margin : 0.3em 0;
+    opacity : 0.8;
+}
+
+
+a:link {
+    text-decoration : none;
+}
+a:visited {
+    text-decoration : none;
+}
+a:hover {
+    text-decoration : underline;
+}
+a:active {
+    text-decoration : underline;
 }

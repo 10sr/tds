@@ -65,7 +65,7 @@ TDSContent = (function (){
             params["offset"] = __offset.toString();
         }
 
-        // TDSNotify.show(JSON.stringify(params), true);
+        TDSNotify.debug(JSON.stringify(params), true);
         TDSReq.req("/user/dashboard", params);
     }
 
@@ -75,8 +75,8 @@ TDSContent = (function (){
 
         if (obj.meta.status === 200) {
             var total_fetched = obj.response.posts.length;
-            TDSNotify.show("Queued: " + total_fetched.toString());
-            TDSNotify.show("Oldest id: " + __oldest.toString());
+            TDSNotify.debug("Queued: " + total_fetched.toString());
+            TDSNotify.debug("Oldest id: " + __oldest.toString());
             var total_queued = 0;
             var ids = [];
             if (total_fetched === 0) {
@@ -105,7 +105,7 @@ TDSContent = (function (){
             for (var i = 0; i < total_fetched; i++) {
                 ids.push(obj.response.posts[i].id.toString());
             }
-            TDSNotify.show("Fetched posts: " + ids.join("\n"));
+            TDSNotify.debug("Fetched posts: " + ids.join("\n"));
 
             var cur_latest = obj.response.posts[0].id;
             var cur_oldest = obj.response.posts[total_fetched - 1].id;

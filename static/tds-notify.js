@@ -41,10 +41,16 @@ var TDSNotify = (function (){
         return;
     }
 
+    function debug(msg, sticky){
+        return;
+        show("DEBUG: " + msg, sticky);
+    }
+
     return {
         init: init,
         show: show,
-        clear: clear
+        clear: clear,
+        debug: debug
     };
 })();
 

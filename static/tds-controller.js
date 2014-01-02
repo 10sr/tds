@@ -24,10 +24,10 @@ var TDSController = (function (){
     function __onPinClickListener(){
         // i dont want use `this'.
         if (__epin.checked) {
-            TDSNotify.show("pin current");
+            TDSNotify.show("Pin current one");
             TDSSS.pin();
         } else {
-            TDSNotify.show("unpin current");
+            TDSNotify.show("Unpin");
             TDSSS.unpin();
         }
         return;
