@@ -31,14 +31,6 @@ body {
     text-decoration : underline;
 }
 
-
-#controller {
-    position : absolute;
-    top : 5em;
-    width : 830px;
-    text-align : right;
-}
-
 #frame {
     background-color : #ffffff;
     padding : 10px;

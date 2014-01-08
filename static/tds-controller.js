@@ -2,8 +2,11 @@ var TDSController = (function (){
     // Get control values from html and update the behavior of others.
 
     var __interval = 500;
-    var __econtroller = null;
+    // var __econtroller = null;
     var __epin = null;
+
+    const __PIN_TEXT = "PIN";
+    const __UNPIN_TEXT = "UNPIN";
 
     function init(){
         if (window.addEventListener) {
@@ -14,20 +17,23 @@ var TDSController = (function (){
     }
 
     function __onLoadListener(){
-        __econtroller = window.document.getElementById("controller");
+        // __econtroller = window.document.getElementById("controller");
 
         __epin = window.document.getElementById("controller-pin");
+        __epin.innerHTML = __PIN_TEXT;
         __epin.addEventListener("click", __onPinClickListener);
         return;
     }
 
     function __onPinClickListener(){
         // i dont want use `this'.
-        if (__epin.checked) {
+        if (__epin.innerHTML === __PIN_TEXT) {
             TDSNotify.show("Pin current one");
+            __epin.innerHTML = __UNPIN_TEXT;
             TDSSS.pin();
-        } else {
+        } else if (__epin.innerHTML === __UNPIN_TEXT) {
             TDSNotify.show("Unpin");
+            __epin.innerHTML = __PIN_TEXT;
             TDSSS.unpin();
         }
         return;
