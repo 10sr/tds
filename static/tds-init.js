@@ -14,22 +14,49 @@ var TDSInit = (function (){
     }
 
     function __onLoadListener(){
-        __getToken(cbGetToken);
+        __getToken();
     }
 
-    function __getToken(callback){
+    function __getToken(){
         // Access to /token to get tokens from ndb and run callback function.
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "token", true);
         xhr.onreadystatechange = function(){
             if (xhr.readyState === 4) {
-                callback(xhr);
+                __cbGetToken(xhr);
             }
         };
         xhr.send(null);
     }
 
-    function cbGetToken(xhr){
+    function __checkAuth(){
+        if (TDSReq.isready()) {
+            TDSReq.req("/user/info", {
+                callback: "TDSInit.__cbCheckAuth"
+            });
+        } else {
+            TDSNotify.show(
+                "Cannot get tokens for you. First go setup page.",
+                true
+            );
+        }
+    }
+
+    function __cbCheckAuth(obj){
+        TDSReq.onFinish();
+        if (obj["meta"]["status"] === 200) {
+            var tname = obj["response"]["user"]["name"];
+            TDSNotify.show("Tumblr login name: " + tname);
+            TDSSS.start();
+        } else {
+            var msg = obj["meta"]["msg"];
+            TDSNotify.show(msg);
+            TDSNotify.show("Auth your tumblr account.", t);
+        }
+        return;
+    }
+
+    function __cbGetToken(xhr){
         // callback function for getToken. Call TDSSS.start if TDSReq is ready.
         // Otherwise move to /setup page.
         if (xhr.status === 200) {
@@ -39,15 +66,7 @@ var TDSInit = (function (){
                              json.con_token,
                              json.con_secret);
             // alert(TDSReq.isready())
-            if (! TDSReq.isready()) {
-                TDSNotify.show(
-                    "Cannot get tokens for you. First go setup page.",
-                    true
-                );
-                // window.content.location.href = "setup";
-            } else {
-                TDSSS.start();
-            }
+            __checkAuth();
         } else {
             // not sane status
             return;
@@ -55,7 +74,8 @@ var TDSInit = (function (){
     }
 
     return {
-        init: init
+        init: init,
+        __cbCheckAuth: __cbCheckAuth
     };
 })();
 
